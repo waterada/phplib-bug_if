@@ -1,11 +1,15 @@
 bugIf / bugIfEmpty
 ===================
 
-[![Build Status](https://travis-ci.org/waterada/FileFabricate.svg?branch=master)](https://travis-ci.org/waterada/FileFabricate)
+[![Build Status](https://travis-ci.org/waterada/phplib-bug_if.svg?branch=master)](https://travis-ci.org/waterada/phplib-bug_if)
 
 
 概要(summary)
 -------------
+
+バグ発見用のコードを読みやすく、かつ、phpunit のテストコードカバレッジの率を下げることなく追加するためのもの。
+
+旧来のコード：
 
 ```php
 if (!is_array($param1)) {
@@ -26,6 +30,8 @@ if (!is_array($param2)) {
 
 それを簡単に解決するのがこの関数 `bugIf` だ。
 上記の処理はこう書ける。
+
+導入後のコード：
 
 ```php
 bugIf(!is_array($param1), $param1);
