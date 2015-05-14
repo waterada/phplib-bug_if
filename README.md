@@ -153,5 +153,12 @@ Install
 
 - `comoposer update waterada/phplib-bug_if` を実行してください。(Please run `comoposer update waterada/phplib-bug_if`.)
 
+- 適当な場所（`bootstrap.php` 等かならず読まれる場所）に下記を記入して `bugIf` をロードしてください。
+  (Please write the following to load `bugIf`.)
+
+  ```php
+  require_once 'vendor/waterada/phplib-bug_if/src/BugIf.php';
+  ```
+
 以上で使えるようになります。
 That's all.
