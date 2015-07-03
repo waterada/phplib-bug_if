@@ -123,11 +123,6 @@ bugIfEmpty($param1, $param2);
 Install
 -------------
 
-- 適当な場所（`bootstrap.php` 等かならず読まれる場所）に [src/BugIf.php](src/BugIf.php) の内容をコピーしてください。
-  (Please copy and paste the contents of [src/BugIf.php](src/BugIf.php) into somewhere of your code which will always be called.)
-
-もしくは (Or)
-
 - composer.json に下記を記述してください。(Please write the following into your composer.json.)
 
   - `"repositories": []` のパートに下記を追加 (inside the `"repositories": []` part):
@@ -139,13 +134,15 @@ Install
         }
   ```
 
-  - `"require-dev": {}` のパートに下記を追加 (inside the `"require-dev": {}` part):
+  - `"require": {}` のパートに下記を追加 (inside the `"require": {}` part):
 
   ```
         "waterada/phplib-bug_if": "1.0.*"
   ```
 
 - `comoposer update waterada/phplib-bug_if` を実行してください。(Please run `comoposer update waterada/phplib-bug_if`.)
+
+- `bootstrap.php` など、必ず通る場所で `BugIf::import();` を記述してください。(Please write `BugIf::import();` on the source where is surely executed like `bootstrap.php`.)
 
 以上で使えるようになります。
 That's all.

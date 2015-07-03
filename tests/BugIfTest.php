@@ -3,9 +3,7 @@
 
 /** @noinspection PhpIncludeInspection */
 require_once realpath(dirname(dirname(__FILE__)) . "/vendor/autoload.php");
-/** @noinspection PhpIncludeInspection */
-require_once realpath(dirname(dirname(__FILE__)) . "/src/BugIf.php");
-
+BugIf::import();
 
 class BugIfTest extends PHPUnit_Framework_TestCase {
     public function setUp() {

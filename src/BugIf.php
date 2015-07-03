@@ -48,3 +48,8 @@ function bugIfEmpty($condition) {
     }
     throw new LogicException($msg);
 }
+
+class BugIf {
+    public static function import() {
+    }
+}
