@@ -10,10 +10,11 @@
  * 第2引数以降に値を渡せば、その値がメッセージに表示される。
  *
  * @param $condition
+ * @return null
  */
 function bugIf($condition) {
     if ($condition == false) {
-        return;
+        return null;
     }
 
     $args = func_get_args();
@@ -28,23 +29,27 @@ function bugIf($condition) {
         default:
             $msg = 'bug because:';
             foreach ($args as $i => $a) {
-                $msg .= "\n" . $i . ":" . var_export($args[$i], true);
+                $msg .= "\n(" . $i . "):" . var_export($args[$i], true);
             }
             break;
     }
     throw new LogicException($msg);
 }
 
-function bugIfEmpty($condition) {
+/**
+ * @param $condition
+ * @return null
+ */
+function bugIfEmpty(&$condition) {
     if (!empty($condition)) {
-        return;
+        return null;
     }
 
     $args = func_get_args();
     array_shift($args);
-    $msg = sprintf("bug because:\ncondition:%s", var_export($condition, true));
+    $msg = sprintf("bug because:\n(condition):%s", var_export($condition, true));
     foreach ($args as $i => $a) {
-        $msg .= "\n" . $i . ":" . var_export($args[$i], true);
+        $msg .= "\n(" . $i . "):" . var_export($args[$i], true);
     }
     throw new LogicException($msg);
 }

@@ -72,20 +72,20 @@ class BugIfTest extends PHPUnit_Framework_TestCase {
             ],
             [
                 [true, 'a', 'b'],
-                sprintf("bug because:\n0:%s\n1:%s",
+                sprintf("bug because:\n(0):%s\n(1):%s",
                     var_export('a', true),
                     var_export('b', true)),
             ],
             [
                 [true, 'a', 'b', 'c'],
-                sprintf("bug because:\n0:%s\n1:%s\n2:%s",
+                sprintf("bug because:\n(0):%s\n(1):%s\n(2):%s",
                     var_export('a', true),
                     var_export('b', true),
                     var_export('c', true)),
             ],
             [
                 [true, 'a', 'b', 'c', 'd'],
-                sprintf("bug because:\n0:%s\n1:%s\n2:%s\n3:%s",
+                sprintf("bug because:\n(0):%s\n(1):%s\n(2):%s\n(3):%s",
                     var_export('a', true),
                     var_export('b', true),
                     var_export('c', true),
@@ -110,6 +110,10 @@ class BugIfTest extends PHPUnit_Framework_TestCase {
         }
     }
 
+    public function test_bugIf_戻り値でnullを返す() {
+        $result = bugIf(false);
+        $this->assertNull($result);
+    }
 
     public function provider_bugIfEmpty_例外発生するcondition() {
         return [
@@ -181,7 +185,7 @@ class BugIfTest extends PHPUnit_Framework_TestCase {
         try {
             bugIfEmpty($condition, $arg);
         } catch (LogicException $e) {
-            $this->assertEquals("bug because:\ncondition:false\n0:" . var_export($arg, true), $e->getMessage());
+            $this->assertEquals("bug because:\n(condition):false\n(0):" . var_export($arg, true), $e->getMessage());
             throw $e;
         }
     }
@@ -191,25 +195,25 @@ class BugIfTest extends PHPUnit_Framework_TestCase {
         return [
             [
                 [false],
-                sprintf("bug because:\ncondition:%s",
+                sprintf("bug because:\n(condition):%s",
                     var_export(false, true)),
             ],
             [
                 [false, 'a'],
-                sprintf("bug because:\ncondition:%s\n0:%s",
+                sprintf("bug because:\n(condition):%s\n(0):%s",
                     var_export(false, true),
                     var_export('a', true)),
             ],
             [
                 [false, 'a', 'b'],
-                sprintf("bug because:\ncondition:%s\n0:%s\n1:%s",
+                sprintf("bug because:\n(condition):%s\n(0):%s\n(1):%s",
                     var_export(false, true),
                     var_export('a', true),
                     var_export('b', true)),
             ],
             [
                 [false, 'a', 'b', 'c'],
-                sprintf("bug because:\ncondition:%s\n0:%s\n1:%s\n2:%s",
+                sprintf("bug because:\n(condition):%s\n(0):%s\n(1):%s\n(2):%s",
                     var_export(false, true),
                     var_export('a', true),
                     var_export('b', true),
@@ -226,11 +230,38 @@ class BugIfTest extends PHPUnit_Framework_TestCase {
      */
     public function test_bugIfEmpty_引数の数による出力の変化($args, $expected) {
         try {
-            call_user_func_array('bugIfEmpty', $args);
+            switch (count($args)) {
+                case 1:
+                    bugIfEmpty($args[0]);
+                    break;
+                case 2:
+                    bugIfEmpty($args[0], $args[1]);
+                    break;
+                case 3:
+                    bugIfEmpty($args[0], $args[1], $args[2]);
+                    break;
+                case 4:
+                    bugIfEmpty($args[0], $args[1], $args[2], $args[3]);
+                    break;
+            }
         } catch (LogicException $e) {
             array_shift($args);
             $this->assertEquals($expected, $e->getMessage());
             throw $e;
         }
+    }
+
+    public function test_bugIfEmpty_戻り値でnullを返す() {
+        $param = "aaa";
+        $result = bugIfEmpty($param);
+        $this->assertNull($result);
+    }
+
+    /**
+     * @expectedException LogicException
+     */
+    public function test_bugIfEmpty_存在しない配列の要素を参照していても警告出ない() {
+        $param = [];
+        bugIfEmpty($param['存在しない要素']);
     }
 }
