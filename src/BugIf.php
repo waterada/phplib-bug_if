@@ -62,6 +62,9 @@ class BugIf {
             }
         }
         $exceptionClass = self::$exceptionClass;
+        if (!class_exists($exceptionClass)) {
+            $exceptionClass = 'LogicException';
+        }
         return new $exceptionClass($msg);
     }
 }

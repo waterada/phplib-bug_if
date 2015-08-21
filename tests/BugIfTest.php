@@ -283,4 +283,13 @@ class BugIfTest extends PHPUnit_Framework_TestCase {
         $value = null;
         bugIfEmpty($value, '例外発生');
     }
+
+    /**
+     * @expectedException LogicException
+     * @expectedExceptionMessage 例外発生
+     */
+    public function test_bugIfEmpty_存在しない例外クラスが指定されたらLogicExceptionが代わりに利用される() {
+        BugIf::import('NOT_EXIST');
+        bugIf(true, '例外発生');
+    }
 }
