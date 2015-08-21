@@ -3,11 +3,11 @@
 
 /** @noinspection PhpIncludeInspection */
 require_once realpath(dirname(dirname(__FILE__)) . "/vendor/autoload.php");
-BugIf::import();
 
 class BugIfTest extends PHPUnit_Framework_TestCase {
     public function setUp() {
         parent::setUp();
+        BugIf::import();
     }
 
     public function tearDown() {
@@ -263,5 +263,24 @@ class BugIfTest extends PHPUnit_Framework_TestCase {
     public function test_bugIfEmpty_存在しない配列の要素を参照していても警告出ない() {
         $param = [];
         bugIfEmpty($param['存在しない要素']);
+    }
+
+    /**
+     * @expectedException PHPUnit_Framework_Exception
+     * @expectedExceptionMessage 例外発生
+     */
+    public function test_bugIf_LogicExceptionの代わりにPHPUnit_Framework_Exceptionで例外を出すことができる() {
+        BugIf::importForCakePHP();
+        bugIf(true, '例外発生');
+    }
+
+    /**
+     * @expectedException PHPUnit_Framework_Exception
+     * @expectedExceptionMessage 例外発生
+     */
+    public function test_bugIfEmpty_LogicExceptionの代わりにPHPUnit_Framework_Exceptionで例外を出すことができる() {
+        BugIf::importForCakePHP();
+        $value = null;
+        bugIfEmpty($value, '例外発生');
     }
 }

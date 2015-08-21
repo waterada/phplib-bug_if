@@ -150,5 +150,7 @@ Install
 
 - `bootstrap.php` など、必ず通る場所で `BugIf::import();` を記述してください。(Please write `BugIf::import();` on the source where is surely executed like `bootstrap.php`.)
 
+- `BugIf::import();` の代わりに `BugIf::importForCakePHP();` を使うと CakePHP の `test.php` 上でも読みやすく表示されます。(The exception message is displayed easier to understand when you are on the `test.php` of the CakePHP if you use `BugIf::importForCakePHP();` instead of `BugIf::import();`.)
+
 以上で使えるようになります。
 That's all.

@@ -19,21 +19,7 @@ function bugIf($condition) {
 
     $args = func_get_args();
     array_shift($args);
-    switch (count($args)) {
-        case 0:
-            $msg = 'bug!';
-            break;
-        case 1:
-            $msg = 'bug because:' . var_export($args[0], true);
-            break;
-        default:
-            $msg = 'bug because:';
-            foreach ($args as $i => $a) {
-                $msg .= "\n(" . $i . "):" . var_export($args[$i], true);
-            }
-            break;
-    }
-    throw new LogicException($msg);
+    throw BugIf::newException($args);
 }
 
 /**
@@ -47,14 +33,35 @@ function bugIfEmpty(&$condition) {
 
     $args = func_get_args();
     array_shift($args);
-    $msg = sprintf("bug because:\n(condition):%s", var_export($condition, true));
-    foreach ($args as $i => $a) {
-        $msg .= "\n(" . $i . "):" . var_export($args[$i], true);
-    }
-    throw new LogicException($msg);
+    $args = array_merge([
+        'condition' => $condition,
+    ], $args);
+    throw BugIf::newException($args);
 }
 
 class BugIf {
-    public static function import() {
+    static $exceptionClass = 'LogicException';
+
+    public static function import($exceptionClass = 'LogicException') {
+        self::$exceptionClass = $exceptionClass;
+    }
+
+    public static function importForCakePHP() {
+        self::import('PHPUnit_Framework_Exception');
+    }
+
+    public static function newException($args = []) {
+        if (empty($args)) {
+            $msg = 'bug!';
+        } elseif (count($args) == 1 && array_key_exists(0, $args)) {
+            $msg = 'bug because:' . var_export($args[0], true);
+        } else {
+            $msg = 'bug because:';
+            foreach ($args as $i => $a) {
+                $msg .= "\n(" . $i . "):" . var_export($a, true);
+            }
+        }
+        $exceptionClass = self::$exceptionClass;
+        return new $exceptionClass($msg);
     }
 }
