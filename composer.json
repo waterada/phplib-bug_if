@@ -1,6 +1,7 @@
 {
     "name": "waterada/phplib-bug_if",
     "description": "Throw an Exception as it is a bug if $condition is true. This is to add bug-checking codes without losing any code coverage rate.",
+    "license": "MIT",
     "minimum-stability": "dev",
     "authors": [
         {
